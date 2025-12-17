@@ -8,6 +8,7 @@ interface CircularProgressProps {
     strokeWidth?: number;
     label?: string;
     subLabel?: string;
+    color?: string;
 }
 
 export function CircularProgress({
@@ -15,11 +16,14 @@ export function CircularProgress({
     size = 200,
     strokeWidth = 15,
     label,
-    subLabel
+    subLabel,
+    color = "text-neon-green" // Default color class
 }: CircularProgressProps) {
     const radius = (size - strokeWidth) / 2;
     const circumference = radius * 2 * Math.PI;
     const offset = circumference - (progress / 100) * circumference;
+
+    const isHex = color.startsWith('#');
 
     return (
         <div className="relative flex flex-col items-center justify-center" style={{ width: size, height: size }}>
@@ -38,7 +42,8 @@ export function CircularProgress({
                     cy={size / 2}
                 />
                 <circle
-                    className="text-neon-green transition-all duration-1000 ease-out"
+                    className={cn("transition-all duration-1000 ease-out", !isHex && color)}
+                    style={isHex ? { color } : undefined}
                     stroke="currentColor"
                     strokeWidth={strokeWidth}
                     strokeDasharray={circumference}
